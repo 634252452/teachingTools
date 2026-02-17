@@ -1,0 +1,80 @@
+/**
+ * Markmap Visualizer Tool Styles
+ */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html, body {
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: #f5f5f5;
+    height: 100vh;
+    overflow: hidden;
+}
+
+.markmap-container {
+    display: none;
+    width: 100%;
+    height: 100vh;
+    flex-direction: column;
+    background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 10;
+}
+
+.markmap-container.show {
+    display: flex !important;
+}
+
+#mindmap {
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+    display: block;
+}
+
+/* Ensure SVG is visible */
+#mindmap svg {
+    width: 100%;
+    height: 100%;
+}
+
+/* Markmap node styling */
+.markmap-node {
+    cursor: pointer;
+}
+
+.markmap-node circle {
+    fill: #667eea;
+    stroke: #764ba2;
+    stroke-width: 2;
+}
+
+.markmap-node text {
+    fill: white;
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.markmap-link {
+    stroke: #bbb;
+    stroke-opacity: 0.7;
+    fill: none;
+}
+
+/* Text styling */
+text {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}

@@ -1,1 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teaching Tools Hub</title>
+    <link rel="stylesheet" href="shared/hub-styles.css">
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🎓 Teaching Tools Hub</h1>
+            <p>Educational web tools for personalized learning experiences</p>
+        </div>
 
+        <!-- Quick Launch Section -->
+        <div class="quick-launch-section">
+            <h2>⚡ Quick Launch</h2>
+            <form id="quickLaunchForm" class="quick-launch-form">
+                <div class="form-group">
+                    <label for="toolSelect">Select Tool:</label>
+                    <select id="toolSelect" required>
+                        <option value="">-- Choose a tool --</option>
+                        <option value="reveal-slideshow">📊 Reveal Slideshow</option>
+                        <option value="knightlab-timeline">📅 Knight Lab Timeline</option>
+                        <option value="markmap-visualizer">🧠 Markmap Visualizer</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="csvUrl">CSV/Sheet URL:</label>
+                    <input 
+                        type="url" 
+                        id="csvUrl" 
+                        placeholder="https://docs.google.com/spreadsheets/... or your CSV link" 
+                        required
+                    >
+                    <small>Supports Google Sheets, GitHub, Dropbox, or any public CSV URL</small>
+                </div>
+
+                <div class="form-group" id="titleGroup" style="display: none;">
+                    <label for="mapTitle">Map Title (for Markmap):</label>
+                    <input 
+                        type="text" 
+                        id="mapTitle" 
+                        placeholder="Enter the exact title of the mind map to display"
+                    >
+                    <small>Must match a title in your CSV</small>
+                </div>
+
+                <button type="submit" class="launch-btn">🚀 Launch Tool</button>
+            </form>
+        </div>
+
+        <div class="tools-grid">
+            <div class="tool-card">
+                <h2>📊 Reveal Slideshow</h2>
+                <p>Create beautiful presentations using reveal.js. Load slide content from CSV files to quickly build and share slideshows.</p>
+                <a href="tools/reveal-slideshow/" class="tool-link">Open Tool</a>
+                <small>📝 Example: ?csv=https://example.com/slides.csv</small>
+            </div>
+
+            <div class="tool-card">
+                <h2>📅 Knight Lab Timeline</h2>
+                <p>Interactive timeline visualization powered by Knight Lab. Load historical events from CSV files to create engaging timelines with media support.</p>
+                <a href="tools/knightlab-timeline/" class="tool-link">Open Tool</a>
+                <small>📝 Example: ?csv=https://example.com/timeline.csv</small>
+            </div>
+
+            <div class="tool-card">
+                <h2>🧠 Markmap Visualizer</h2>
+                <p>Create interactive mind maps from markdown. Load mind maps from CSV files to visualize concepts, brainstorming ideas, and knowledge organization.</p>
+                <a href="tools/markmap-visualizer/" class="tool-link">Open Tool</a>
+                <small>📝 Example: ?csv=https://example.com/maps.csv&title=MapTitle</small>
+            </div>
+
+            <!-- More tools will be added here -->
+        </div>
+    </div>
+
+    <script src="shared/url-utils.js"></script>
+    <script src="hub-launcher.js"></script>
+</body>
+</html>

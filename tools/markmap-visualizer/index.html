@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Markmap Visualizer</title>
+
+    <!-- Tool Styles -->
+    <link rel="stylesheet" href="../../shared/styles.css">
+    <link rel="stylesheet" href="styles.css">
+    <!-- D3.js required by Markmap -->
+    <script src="https://unpkg.com/d3@7"></script>
+</head>
+<body>
+    <div class="loading" id="loadingContainer">
+        <div class="spinner"></div>
+        <p>Loading mind map...</p>
+    </div>
+
+    <div id="markmapContainer" class="markmap-container">
+        <svg id="mindmap" style="background: white; border: 2px solid red;">
+            <!-- Markmap will render here -->
+        </svg>
+        <div id="debug" style="position: absolute; bottom: 10px; left: 10px; color: #333; font-size: 12px; background: white; padding: 10px; border-radius: 4px; z-index: 100;"></div>
+    </div>
+
+    <div class="error-message" id="errorMessage"></div>
+
+    <!-- Markmap via unpkg -->
+    <script src="https://unpkg.com/markmap-lib"></script>
+    <script src="https://unpkg.com/markmap-view"></script>
+    <script src="../../shared/url-utils.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>
