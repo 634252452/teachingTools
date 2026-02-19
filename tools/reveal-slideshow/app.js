@@ -251,9 +251,13 @@ class SlideShowApp {
             keyboard: true,
             touch: true,
             overview: true,
-            width: '100%',
-            height: '100%',
-            margin: 0.1,
+            // Use a fixed presentation size so Reveal can scale it down on small screens
+            width: 960,
+            height: 700,
+            // Allow some breathing room around slides and sensible scaling limits
+            margin: 0.08,
+            minScale: 0.2,
+            maxScale: 1.0,
         });
     }
 
