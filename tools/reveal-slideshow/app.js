@@ -27,7 +27,25 @@ class SlideShowApp {
     async loadCSV() {
         try {
             const csvText = await URLUtils.fetchCSV(this.csvUrl);
-            this.parseCSV(csvText);
+            const rows = CSVUtils.parseCSVText(csvText);
+            // Map rows to internal slide model and apply optional filtering
+            this.slides = rows.map(r => ({
+                slide_id: (r.slide_id || r.id || ''),
+                heading_html: r.heading_html || r.title || r.heading || '',
+                content_html: r.content_html || r.content || r.body || '',
+                background: r.background || r.bg || '',
+                transition: r.transition || '',
+                classes: r.classes || '',
+                notes: r.notes || '',
+                presentation_filter: r.presentation_filter || r.presentation || ''
+            })).filter(s => {
+                if (!this.presentationFilter) return true;
+                return s.presentation_filter && s.presentation_filter === this.presentationFilter;
+            });
+
+            if (this.slides.length === 0) {
+                throw new Error('No valid slides found in CSV for the selected presentation');
+            }
             this.renderSlides();
         } catch (error) {
             this.showError(`Failed to load CSV: ${error.message}`);
@@ -41,57 +59,8 @@ class SlideShowApp {
      * "Slide 1 Title","Slide 1 content"
      * "Slide 2 Title","Slide 2 content line 1\nSlide 2 content line 2"
      */
-    parseCSV(csvText) {
-        // Basic CSV parsing that respects quoted fields and maps header columns
-        const rawLines = csvText.split('\n');
-        // Remove empty trailing lines
-        const lines = rawLines.filter(l => l.trim() !== '');
-
-        if (lines.length === 0) {
-            throw new Error('CSV file is empty');
-        }
-
-        // Parse header
-        const header = this.parseCSVLine(lines[0]).map(h => h.trim());
-        const colIndex = {};
-        header.forEach((name, idx) => {
-            colIndex[name] = idx;
-        });
-
-        // Required fields in our CSV: slide_id, heading_html, content_html, background, transition, classes, notes, presentation_filter
-        for (let i = 1; i < lines.length; i++) {
-            const fields = this.parseCSVLine(lines[i]);
-            if (fields.length === 0) continue;
-
-            const get = (name) => {
-                const idx = colIndex[name];
-                return (idx !== undefined && fields[idx] !== undefined) ? fields[idx].trim() : '';
-            };
-
-            const slideObj = {
-                slide_id: get('slide_id'),
-                heading_html: get('heading_html'),
-                content_html: get('content_html'),
-                background: get('background'),
-                transition: get('transition'),
-                classes: get('classes'),
-                notes: get('notes'),
-                presentation_filter: get('presentation_filter')
-            };
-
-            // If a presentation filter is set in the URL, only include matching rows
-            if (this.presentationFilter) {
-                if (!slideObj.presentation_filter) continue;
-                if (slideObj.presentation_filter !== this.presentationFilter) continue;
-            }
-
-            this.slides.push(slideObj);
-        }
-
-        if (this.slides.length === 0) {
-            throw new Error('No valid slides found in CSV for the selected presentation');
-        }
-    }
+    /* CSV parsing is handled by shared/csv-utils.js (PapaParse if available).
+       The loaded rows are mapped to `this.slides` in `loadCSV()` above. */
 
     /**
      * Parse vertical level parameter into an integer (1-6) or null
