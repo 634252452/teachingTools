@@ -57,6 +57,28 @@ class TimelineApp {
             return '';
         };
 
+        // Helper: normalize media/background URLs and convert YouTube watch links to embed URLs with origin
+        const normalizeMediaUrl = (raw) => {
+            if (!raw) return '';
+            let u = raw.trim();
+            if (u.startsWith('//')) u = 'https:' + u;
+            if (/^http:\/\//i.test(u)) u = u.replace(/^http:\/\//i, 'https://');
+
+            // Convert Youtube watch URLs or youtu.be short links to embed with origin to avoid postMessage origin errors
+            const ytMatch = u.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/)([A-Za-z0-9_-]{11})/i);
+            if (ytMatch) {
+                const id = ytMatch[1];
+                try {
+                    const origin = encodeURIComponent(location.origin);
+                    return `https://www.youtube.com/embed/${id}?enablejsapi=1&origin=${origin}`;
+                } catch (e) {
+                    return `https://www.youtube.com/embed/${id}`;
+                }
+            }
+
+            return u;
+        };
+
         rows.forEach(row => {
             const year = this.parseNumber(getField(row, ['Year', 'year', 'Start Year', 'start year']));
             const month = this.parseNumber(getField(row, ['Month', 'month', 'Start Month', 'start month'])) || 1;
@@ -64,12 +86,14 @@ class TimelineApp {
             const time = getField(row, ['Time', 'time']);
             const headline = getField(row, ['Headline', 'headline', 'Title', 'title']);
             const text = getField(row, ['Text', 'text', 'Description', 'description']);
-            const mediaUrl = getField(row, ['Media', 'media', 'Media URL', 'media_url']);
+            const mediaUrlRaw = getField(row, ['Media', 'media', 'Media URL', 'media_url']);
+            const mediaUrl = normalizeMediaUrl(mediaUrlRaw);
             const mediaCredit = getField(row, ['Media Credit', 'media credit', 'credit']);
             const mediaCaption = getField(row, ['Media Caption', 'media caption', 'caption']);
             const mediaThumb = getField(row, ['Media Thumbnail', 'media thumbnail', 'thumbnail']);
             const group = getField(row, ['Group', 'group', 'Type', 'type']);
-            const background = getField(row, ['Background', 'background']);
+            const backgroundRaw = getField(row, ['Background', 'background']);
+            const background = (backgroundRaw && /^(https?:)?\/\//i.test(backgroundRaw)) ? normalizeMediaUrl(backgroundRaw) : (backgroundRaw || '');
 
             if (!year || !headline) return; // skip invalid
 
@@ -98,8 +122,17 @@ class TimelineApp {
 
             if (group) event.group = group;
             if (background) {
-                // Timeline.js expects a background object with color (e.g. { color: '#01724C' })
-                event.background = { color: background };
+                const b = background.trim();
+                // Hex color (e.g. #01724C)
+                if (/^#([0-9a-f]{3}|[0-9a-f]{6})$/i.test(b)) {
+                    event.background = { color: b };
+                } else if (/^(https?:)?\/\//i.test(b) || /\.(jpg|jpeg|png|gif|webp)(\?|$)/i.test(b)) {
+                    // URL to an image — ensure https and assign as url
+                    event.background = { url: b };
+                } else {
+                    // fallback: treat as color string
+                    event.background = { color: b };
+                }
             }
 
             this.events.push(event);
