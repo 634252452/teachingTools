@@ -2,6 +2,13 @@
  * HTML Content Viewer Styles - Clean & Simple
  */
 
+/* Prefer light color scheme to avoid browsers forcing a dark theme */
+:root,
+html {
+    color-scheme: light;
+    background-color: #ffffff;
+}
+
 body {
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
     background: white;
