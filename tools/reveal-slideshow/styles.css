@@ -36,6 +36,38 @@ body {
 }
 
 .reveal .slide-content {
-    font-size: clamp(0.95rem, 3.5vw, 1.2rem);
+    font-size: clamp(1.8rem, 5vw, 2.8rem);
     line-height: 1.6;
+}
+
+/* Lists styling */
+.reveal ul,
+.reveal ol {
+    font-size: 1em;
+    margin: 0.5em 0;
+}
+
+.reveal li {
+    margin: 0.3em 0;
+    font-size: 1em;
+}
+
+/* Paragraph styling - inherits from parent */
+.reveal p {
+    font-size: 1em;
+    line-height: 1.6;
+    margin: 0.5em 0;
+}
+
+/* Links and other elements */
+.reveal a {
+    font-size: 1em;
+}
+
+.reveal strong {
+    font-size: 1em;
+}
+
+.reveal em {
+    font-size: 1em;
 }
